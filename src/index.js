@@ -9,6 +9,10 @@ module.exports = {
       },
     };
 
+    if (res.meta) {
+      Object.assign(response.meta, res.meta);
+    }
+
     if (!isProd) {
       response.meta.timers = req.timers;
     }
