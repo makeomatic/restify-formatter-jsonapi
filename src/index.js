@@ -42,6 +42,7 @@ module.exports = {
     }
 
     const data = stringify(response);
+    res.setHeader('Content-Type', 'application/vnd.api+json');
     res.setHeader('Content-Length', Buffer.byteLength(data));
 
     return next(null, data);
