@@ -13,6 +13,10 @@ module.exports = {
       Object.assign(response.meta, res.meta);
     }
 
+    if (res.links) {
+      Object.assign(response.links, res.links);
+    }
+
     if (!isProd) {
       response.meta.timers = req.timers;
     }
@@ -41,7 +45,7 @@ module.exports = {
       }
     } else if (Buffer.isBuffer(body)) {
       response.data = body.toString('base64');
-    } else {
+    } else if (body) {
       response.data = body;
     }
 
