@@ -14,7 +14,7 @@ module.exports = {
     }
 
     if (res.links) {
-      Object.assign(response.links, res.links);
+      response.links = Object.assign({}, res.links);
     }
 
     if (!isProd) {
