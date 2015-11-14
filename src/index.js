@@ -32,7 +32,7 @@ module.exports = {
         response.errors.push({
           status: body.name,
           code: res.statusCode,
-          title: err.message,
+          title: typeof body.generateMessage === 'function' ? body.generateMessage() : (err.message || err.text),
           detail: err.errors,
         });
       } else {
