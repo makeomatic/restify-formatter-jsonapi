@@ -1,6 +1,6 @@
 {
   "name": "restify-formatter-jsonapi",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Restify jsonapi formatter",
   "main": "./lib/index.js",
   "scripts": {

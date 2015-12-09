@@ -40,7 +40,7 @@ module.exports = {
           status: body.name || 'InternalServerError',
           code: res.statusCode,
           title: body.toString(),
-          stack: isProd ? undefined : body.stack,
+          stack: isProd ? undefined : (typeof body.stack === 'string' ? body.stack.split('\n') : body.stack),
         });
       }
     } else if (Buffer.isBuffer(body)) {
