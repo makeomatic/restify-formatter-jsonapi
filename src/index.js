@@ -9,7 +9,8 @@ const titleToReadable = function(inputString) {
     return undefined;
   }
   return inputString.substring(inputString.indexOf(':') + 2).split(', ').map((eTitle) => {
-    return regEx.exec(eTitle)[1];
+    const match = regEx.exec(eTitle);
+    return match ? match[1] : eTitle;
   }).join(', ');
 };
 
@@ -49,13 +50,12 @@ module.exports = {
           detail: err.errors,
         });
       } else {
-        const title = isProd ? undefined : (typeof body.stack === 'string' ? body.stack.split('\n') : body.stack);
         response.errors.push({
           status: body.name || 'InternalServerError',
           code: res.statusCode,
-          title: body.toString(),
+          title: titleToReadable(body.toString()),
           detail: body.reason || body.errors || {},
-          stack: titleToReadable(title),
+          stack: isProd ? undefined : (typeof body.stack === 'string' ? body.stack.split('\n') : body.stack),
         });
       }
 
