@@ -1,5 +1,3 @@
-'use strict';
-
 const stringify = require('json-stringify-safe');
 const isProd = process.env.NODE_ENV === 'production';
 
