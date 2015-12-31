@@ -1,15 +1,19 @@
 const stringify = require('json-stringify-safe');
 const isProd = process.env.NODE_ENV === 'production';
 
-const titleToReadable = function(inputString) {
-  const regEx = /.*\.([^.]*)/;
-  if (!inputString) {
-    return undefined;
+const titleToReadable = function titleToReadable(name, inputString) {
+  if (name === 'HttpStatusError' || name === 'ValidationError') {
+    const colonPosition = inputString.indexOf(':');
+    const cutBeginning = colonPosition === -1 ? 0 : colonPosition + 2;
+    const regEx = /.*\.([^.]*)/;
+    if (!inputString) {
+      return undefined;
+    }
+    return inputString.substring(cutBeginning).split(', ').map((eTitle) => {
+      const match = regEx.exec(eTitle);
+      return match ? match[1] : eTitle;
+    }).join(', ');
   }
-  return inputString.substring(inputString.indexOf(':') + 2).split(', ').map((eTitle) => {
-    const match = regEx.exec(eTitle);
-    return match ? match[1] : eTitle;
-  }).join(', ');
 };
 
 module.exports = {
@@ -44,14 +48,14 @@ module.exports = {
         response.errors.push({
           status: body.name,
           code: res.statusCode,
-          title: titleToReadable(title),
+          title: titleToReadable(body.name, title),
           detail: err.errors,
         });
       } else {
         response.errors.push({
           status: body.name || 'InternalServerError',
           code: res.statusCode,
-          title: titleToReadable(body.toString()),
+          title: titleToReadable(body.name, body.toString()),
           detail: body.reason || body.errors || {},
           stack: isProd ? undefined : (typeof body.stack === 'string' ? body.stack.split('\n') : body.stack),
         });
