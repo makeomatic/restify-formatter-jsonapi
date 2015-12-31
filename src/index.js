@@ -1,5 +1,17 @@
+'use strict';
+
 const stringify = require('json-stringify-safe');
 const isProd = process.env.NODE_ENV === 'production';
+
+const titleToReadable = function(inputString) {
+  const regEx = /.*\.([^.]*)/;
+  if (!inputString) {
+    return undefined;
+  }
+  return inputString.substring(inputString.indexOf(':') + 2).split(', ').map((eTitle) => {
+    return regEx.exec(eTitle)[1];
+  }).join(', ');
+};
 
 module.exports = {
   'application/vnd.api+json': function jsonapiFormatter(req, res, body, next) {
@@ -29,21 +41,28 @@ module.exports = {
       let err;
       if (typeof body.toJSON === 'function') {
         err = body.toJSON();
+        const title = typeof body.generateMessage === 'function' ? body.generateMessage() : (err.message || err.text);
         response.errors.push({
           status: body.name,
           code: res.statusCode,
-          title: typeof body.generateMessage === 'function' ? body.generateMessage() : (err.message || err.text),
+          title: titleToReadable(title),
           detail: err.errors,
         });
       } else {
+        const title = isProd ? undefined : (typeof body.stack === 'string' ? body.stack.split('\n') : body.stack);
         response.errors.push({
           status: body.name || 'InternalServerError',
           code: res.statusCode,
           title: body.toString(),
           detail: body.reason || body.errors || {},
-          stack: isProd ? undefined : (typeof body.stack === 'string' ? body.stack.split('\n') : body.stack),
+          stack: titleToReadable(title),
         });
       }
+
+      ///////////////////// readable format of title
+
+
+      ///////////
     } else if (Buffer.isBuffer(body)) {
       response.data = body.toString('base64');
     } else if (body) {
