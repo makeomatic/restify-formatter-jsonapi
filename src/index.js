@@ -23,7 +23,7 @@ module.exports = {
 
     if (body instanceof Error) {
       // check for error message
-      res.statusCode = body.statusCode || body.code || body.status_code || 500;
+      res.statusCode = body.statusCode || body.status_code || typeof body.code !== 'string' && body.code || 500;
       response.errors = [];
 
       let err;
@@ -41,7 +41,7 @@ module.exports = {
           code: res.statusCode,
           title: body.toString(),
           detail: body.reason || body.errors || {},
-          stack: isProd ? undefined : (typeof body.stack === 'string' ? body.stack.split('\n') : body.stack),
+          stack: !isProd && (typeof body.stack === 'string' && body.stack.split('\n') || body.stack) || undefined,
         });
       }
     } else if (Buffer.isBuffer(body)) {
