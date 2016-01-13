@@ -2,18 +2,25 @@ const stringify = require('json-stringify-safe');
 const isProd = process.env.NODE_ENV === 'production';
 
 function titleToReadable(name, inputString) {
+  if (!inputString) {
+    return undefined;
+  }
+
   if (name === 'ValidationError') {
     const colonPosition = inputString.indexOf(':');
     const cutBeginning = colonPosition === -1 ? 0 : colonPosition + 2;
     const regEx = /.*\.([^.]*)/;
-    if (!inputString) {
-      return undefined;
-    }
     return inputString.substring(cutBeginning).split(', ').map(eTitle => {
       const match = regEx.exec(eTitle);
       return match ? match[1] : eTitle;
     }).join(', ');
   }
+
+  if (name === 'HttpStatusError') {
+    return inputString.slice(17);
+  }
+
+  return inputString;
 }
 
 module.exports = {
@@ -21,15 +28,12 @@ module.exports = {
     const response = {
       meta: {
         id: req.id(),
+        ...res.meta || {},
       },
     };
 
-    if (res.meta) {
-      Object.assign(response.meta, res.meta);
-    }
-
     if (res.links) {
-      response.links = Object.assign({}, res.links);
+      response.links = { ...res.links };
     }
 
     if (!isProd) {
