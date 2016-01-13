@@ -1,22 +1,20 @@
-'use strict';
-
 const stringify = require('json-stringify-safe');
 const isProd = process.env.NODE_ENV === 'production';
 
-const titleToReadable = function titleToReadable(name, inputString) {
-  if (name === 'HttpStatusError' || name === 'ValidationError') {
+function titleToReadable(name, inputString) {
+  if (name === 'ValidationError') {
     const colonPosition = inputString.indexOf(':');
     const cutBeginning = colonPosition === -1 ? 0 : colonPosition + 2;
     const regEx = /.*\.([^.]*)/;
     if (!inputString) {
       return undefined;
     }
-    return inputString.substring(cutBeginning).split(', ').map((eTitle) => {
+    return inputString.substring(cutBeginning).split(', ').map(eTitle => {
       const match = regEx.exec(eTitle);
       return match ? match[1] : eTitle;
     }).join(', ');
   }
-};
+}
 
 module.exports = {
   'application/vnd.api+json': function jsonapiFormatter(req, res, body, next) {
@@ -62,11 +60,6 @@ module.exports = {
           stack: !isProd && (typeof body.stack === 'string' && body.stack.split('\n') || body.stack) || undefined,
         });
       }
-
-      ///////////////////// readable format of title
-
-
-      ///////////
     } else if (Buffer.isBuffer(body)) {
       response.data = body.toString('base64');
     } else if (body) {
