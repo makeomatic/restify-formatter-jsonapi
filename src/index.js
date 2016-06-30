@@ -1,5 +1,7 @@
 const stringify = require('json-stringify-safe');
+const is = require('is');
 const isProd = process.env.NODE_ENV === 'production';
+const find = require('lodash.find');
 
 function titleToReadable(name, inputString) {
   if (!inputString) {
@@ -13,7 +15,8 @@ function titleToReadable(name, inputString) {
     return inputString.substring(cutBeginning).split(', ').map(eTitle => {
       const match = regEx.exec(eTitle);
       return match ? match[1] : eTitle;
-    }).join(', ');
+    })
+    .join(', ');
   }
 
   if (name === 'HttpStatusError') {
@@ -21,6 +24,12 @@ function titleToReadable(name, inputString) {
   }
 
   return inputString;
+}
+
+// returns code based on possible fields
+const codeFields = ['statusCode', 'status_code', 'code'];
+function getCode(body) {
+  return find(codeFields, field => is.integer(body[field]) && body[field]) || 500;
 }
 
 module.exports = {
@@ -38,17 +47,18 @@ module.exports = {
 
     if (!isProd) {
       response.meta.timers = req.timers;
+      response.meta.path = req.path();
     }
 
     if (body instanceof Error) {
       // check for error message
-      res.statusCode = body.statusCode || body.status_code || typeof body.code !== 'string' && body.code || 500;
+      res.statusCode = getCode(body);
       response.errors = [];
 
       let err;
-      if (typeof body.toJSON === 'function') {
+      if (is.fn(body.toJSON)) {
         err = body.toJSON();
-        const title = typeof body.generateMessage === 'function' ? body.generateMessage() : (err.message || err.text);
+        const title = is.fn(body.generateMessage) ? body.generateMessage() : (err.message || err.text);
         response.errors.push({
           status: body.name,
           code: res.statusCode,
@@ -61,7 +71,7 @@ module.exports = {
           code: res.statusCode,
           title: titleToReadable(body.name, body.toString()),
           detail: body.reason || body.errors || {},
-          stack: !isProd && (typeof body.stack === 'string' && body.stack.split('\n') || body.stack) || undefined,
+          stack: !isProd && (is.string(body.stack) && body.stack.split('\n') || body.stack) || undefined,
         });
       }
     } else if (Buffer.isBuffer(body)) {

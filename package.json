@@ -1,12 +1,13 @@
 {
   "name": "restify-formatter-jsonapi",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Restify jsonapi formatter",
   "main": "./lib/index.js",
   "scripts": {
-    "compile": "./node_modules/.bin/babel ./src -d ./lib",
+    "compile": "babel ./src -d ./lib",
     "prepublish": "npm run compile",
-    "test": "echo 'no test'; exit 1"
+    "lint": "eslint ./src",
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",
@@ -19,23 +20,20 @@
   },
   "homepage": "https://github.com/makeomatic/restify-formatter-jsonapi#readme",
   "dependencies": {
-    "json-stringify-safe": "^5.0.1"
+    "is": "^3.1.0",
+    "json-stringify-safe": "^5.0.1",
+    "lodash.find": "^4.4.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.4.0",
-    "babel-eslint": "^5.0.0-beta6",
-    "babel-plugin-transform-class-properties": "^6.4.0",
-    "babel-plugin-transform-es2015-destructuring": "^6.4.0",
-    "babel-plugin-transform-es2015-parameters": "^6.4.2",
-    "babel-plugin-transform-es2015-shorthand-properties": "^6.3.13",
-    "babel-plugin-transform-es2015-spread": "^6.4.0",
-    "babel-plugin-transform-object-rest-spread": "^6.3.13",
-    "babel-plugin-transform-strict-mode": "^6.3.13",
-    "babel-register": "^6.3.13",
-    "chai": "^3.4.1",
-    "eslint": "^1.10.3",
-    "eslint-config-airbnb": "^3.1.0",
-    "eslint-plugin-mocha": "^1.0.0",
-    "mocha": "^2.3.4"
+    "babel-cli": "^6.10.1",
+    "babel-eslint": "^6.0.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.9.0",
+    "babel-plugin-transform-es2015-spread": "^6.8.0",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-plugin-transform-strict-mode": "^6.8.0",
+    "babel-register": "^6.9.0",
+    "eslint": "^2.10.3",
+    "eslint-config-airbnb-base": "^3.0.0",
+    "eslint-plugin-import": "^1.10.0"
   }
 }
