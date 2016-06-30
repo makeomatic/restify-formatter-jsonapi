@@ -29,7 +29,8 @@ function titleToReadable(name, inputString) {
 // returns code based on possible fields
 const codeFields = ['statusCode', 'status_code', 'code'];
 function getCode(body) {
-  return find(codeFields, field => is.integer(body[field]) && body[field]) || 500;
+  const prop = find(codeFields, field => is.integer(body[field]) && is.within(body[field], 100, 599));
+  return prop && body[prop] || 500;
 }
 
 module.exports = {
