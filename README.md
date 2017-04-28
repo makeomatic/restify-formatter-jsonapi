@@ -1,5 +1,7 @@
 # Restify jsonapi compliant formatter
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/makeomatic/restify-formatter-jsonapi.svg)](https://greenkeeper.io/)
+
 Adds `application/vnd.api+json` formatter
 Make sure to add this into accepts middleware
 Read the spec here: http://jsonapi.org/format
