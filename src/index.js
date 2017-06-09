@@ -27,7 +27,7 @@ function titleToReadable(name, inputString) {
 }
 
 // returns code based on possible fields
-const codeFields = ['statusCode', 'status_code', 'code'];
+const codeFields = ['status', 'statusCode', 'status_code', 'code'];
 function getCode(body) {
   const prop = find(codeFields, field => is.integer(body[field]) && is.within(body[field], 100, 599));
   return prop && body[prop] || 500;
