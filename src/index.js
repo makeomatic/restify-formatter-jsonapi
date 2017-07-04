@@ -55,7 +55,7 @@ module.exports = {
     }
 
     if (res.included !== undefined) {
-      response.included = { ...res.included };
+      response.included = [...res.included];
     }
 
     if (!isProd) {
