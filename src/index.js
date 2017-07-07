@@ -42,7 +42,7 @@ function getCode(body) {
 }
 
 module.exports = {
-  'application/vnd.api+json': function jsonapiFormatter(req, res, body, next) {
+  'application/vnd.api+json': function jsonapiFormatter(req, res, body) {
     const response = {
       meta: {
         id: req.id(),
@@ -97,6 +97,6 @@ module.exports = {
     res.setHeader('Content-Type', 'application/vnd.api+json');
     res.setHeader('Content-Length', Buffer.byteLength(data));
 
-    return setImmediate(next, null, data);
+    return data;
   },
 };

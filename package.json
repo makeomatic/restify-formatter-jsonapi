@@ -1,6 +1,6 @@
 {
   "name": "restify-formatter-jsonapi",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Restify jsonapi formatter",
   "main": "./lib/index.js",
   "scripts": {
@@ -23,6 +23,9 @@
     "is": "^3.1.0",
     "json-stringify-safe": "^5.0.1"
   },
+  "peerDependencies": {
+    "restify": "5.x.x"
+  },
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-eslint": "^7.2.3",
@@ -31,7 +34,7 @@
     "babel-register": "^6.9.0",
     "eslint": "^4.1.1",
     "eslint-config-makeomatic": "^1.0.1",
-    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-promise": "^3.5.0"
   },
   "engine": {
