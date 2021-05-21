@@ -43,12 +43,16 @@ function getCode(body) {
 
 module.exports = {
   'application/vnd.api+json': function jsonapiFormatter(req, res, body) {
-    const response = {
-      meta: {
-        id: req.id(),
-        ...res.meta || {},
-      },
-    };
+    const response = {}
+    if (res.meta !== undefined) {
+      response.meta = res.meta
+    } else {
+      response.meta = { id: req.id() }
+      if (!isProd) {
+        response.meta.timers = req.timers;
+        response.meta.path = req.path();
+      }
+    }
 
     if (res.links !== undefined) {
       response.links = { ...res.links };
@@ -56,11 +60,6 @@ module.exports = {
 
     if (res.included !== undefined) {
       response.included = [...res.included];
-    }
-
-    if (!isProd) {
-      response.meta.timers = req.timers;
-      response.meta.path = req.path();
     }
 
     if (body instanceof Error) {
