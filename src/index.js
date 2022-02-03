@@ -75,15 +75,18 @@ module.exports = {
         response.errors.push({
           status: body.name,
           code: res.statusCode,
+          // extract error internal code 
+          errorCode: body.code,
           title: titleToReadable(body.name, title),
-          detail: err.errors,
+          detail: err.errors || err.detail,
         });
       } else {
         response.errors.push({
           status: body.name || 'InternalServerError',
           code: res.statusCode,
+          errorCode: body.code,
           title: titleToReadable(body.name, body.toString()),
-          detail: body.reason || body.errors || {},
+          detail: body.reason || body.errors || body.detail || {},
           stack: (isProd !== true && (is.string(body.stack) ? body.stack.split('\n') : body.stack)) || undefined,
         });
       }
